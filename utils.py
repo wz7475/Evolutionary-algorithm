@@ -1,5 +1,5 @@
 import json
-from typing import Sequence
+from typing import Sequence, Tuple
 from math import e as e_constant
 from random import uniform
 
@@ -11,7 +11,7 @@ def _manhattandistance(x: Sequence[float], y: Sequence[float]) -> float:
     return abs(x[0] - y[0]) + abs(x[1] - y[1])
 
 
-def cost_function(resources: dict, localisation: Sequence[float]) -> float:
+def cost_function(localisation: Sequence[float]) -> float:
     total_cost = 0
     for resource_name in resources:
         quantity, resource_localisation = resources[resource_name]
@@ -59,11 +59,39 @@ def init_population(constrains: dict, quantity: int):
     ]
 
 
-cube_constains = _get_cube_constrains(resources)
+def roulette_reproduction(population: Sequence, population_grades: Sequence):
+    # TODO: implement
+    return population
+
+
+def find_best_individual(
+    population: Sequence, population_grades: Sequence
+) -> Tuple[float, float]:
+    min_index = 0
+    min_grade = population_grades[min_index]
+    for index in range(1, len(population_grades)):
+        if population_grades[index] <= population_grades:
+            min_index = index
+            min_grade = population_grades[index]
+    return population[min_index], min_grade
+
+
+def one_point_crossover(population: Sequence) -> Sequence:
+    # TODO: implement
+    # choose random point from {0, 1, 2, 3, 4} - 4 points
+    return population
+
+
+def gauss_mutation(population: Sequence, mutation_strength: float) -> Sequence:
+    # TODO : implement
+    return population
+
+
+cube_constrains = _get_cube_constrains(resources)
 
 if __name__ == "__main__":
-    print(cube_constains)
-    print(init_population(cube_constains, 6))
-    print(cost_function(resources, (0, 0)))
-    print(cost_function(resources, (1, 0)))
-    print(cost_function(resources, (10, 0)))
+    print(cube_constrains)
+    print(init_population(cube_constrains, 6))
+    print(cost_function((0, 0)))
+    print(cost_function((1, 0)))
+    print(cost_function((10, 0)))
