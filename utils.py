@@ -1,7 +1,7 @@
 import json
 from typing import Sequence, Tuple
 from math import e as e_constant
-from random import uniform
+from random import uniform, choice, randint
 
 with open("resources.json") as f:
     resources = json.load(f)
@@ -76,10 +76,22 @@ def find_best_individual(
     return population[min_index], min_grade
 
 
-def one_point_crossover(population: Sequence) -> Sequence:
-    # TODO: implement
-    # choose random point from {0, 1, 2, 3, 4} - 4 points
-    return population
+def one_point_crossover(population: Sequence, crossover_probability: float) -> Sequence:
+    new_population = []
+    for i in range(len(population) // 2):
+        random_number = uniform(0, 1)
+        if random_number < crossover_probability:
+            new_population.append(population[i])
+            new_population.append(population[i+1])
+            continue
+        first_parent = population[i]
+        second_parent = population[i+1]
+        intersection = randint(0, len(population))
+        first_child = first_parent[:intersection] + second_parent[intersection:]
+        second_child = first_parent[intersection:] + second_parent[:intersection]
+        new_population.append(first_child)
+        new_population.append(second_child)
+    return new_population
 
 
 def gauss_mutation(population: Sequence, mutation_strength: float) -> Sequence:

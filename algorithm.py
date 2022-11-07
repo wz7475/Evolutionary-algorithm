@@ -10,13 +10,13 @@ def evolution(
 ):
     population_grades = [cost_function(individual) for individual in population_members]
     best_individual, best_grade = find_best_individual(population_members, population_grades)
-    for _ in range(20):
+    for _ in range(1000):
         # reproduction
         mutant_population = roulette_reproduction(population_members, population_grades)
 
         # genetic operations
-        mutant_population = one_point_crossover(mutant_population)
-        mutant_population = gauss_mutation(mutant_population)
+        mutant_population = one_point_crossover(mutant_population, cross_probability)
+        mutant_population = gauss_mutation(mutant_population, mutation_strength)
 
         # grading
         mutants_grades = [cost_function(individual) for individual in mutant_population]
