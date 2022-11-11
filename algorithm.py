@@ -19,6 +19,7 @@ from hiper_params import (
 
 def evolution(
     cost_function: Callable,
+    reproduction_function: Callable,
     population_members: Sequence,
     mutation_strength: float,
     cross_probability: float,
@@ -31,10 +32,7 @@ def evolution(
     best_in_interation = []
     for i in range(iterations):
         # reproduction
-        mutant_population = roulette_reproduction(population_members, population_grades)
-        # mutant_population = roulette_reproduction_weak(
-        #     population_members, population_grades
-        # )
+        mutant_population = reproduction_function(population_members, population_grades)
 
         # genetic operations
         mutant_population = one_point_crossover(mutant_population, cross_probability)
@@ -46,18 +44,13 @@ def evolution(
             mutant_population, mutants_grades
         )
         if best_mutant_grade <= best_grade:
-            # if best_mutant_grade - best_mutant_grade <= 0.0000001:
-            #     print(i)
-            #     break
             best_grade = best_mutant_grade
             best_individual = best_mutant
         best_in_interation.append(best_grade)
         # generational succession
         population_members = mutant_population
         population_grades = mutants_grades
-        # print(best_grade)
 
-    # print(population_grades[0:4], population_grades[-4:])
     return best_individual, best_grade, best_in_interation
 
 
