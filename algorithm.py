@@ -7,6 +7,7 @@ from utils import (
     gauss_mutation,
     init_population,
     cube_constrains,
+    roulette_reproduction_weak,
 )
 from hiper_params import (
     POPULATION_SIZE,
@@ -31,6 +32,9 @@ def evolution(
     for i in range(iterations):
         # reproduction
         mutant_population = roulette_reproduction(population_members, population_grades)
+        # mutant_population = roulette_reproduction_weak(
+        #     population_members, population_grades
+        # )
 
         # genetic operations
         mutant_population = one_point_crossover(mutant_population, cross_probability)
@@ -53,16 +57,14 @@ def evolution(
         population_grades = mutants_grades
         # print(best_grade)
 
-
-
-    print(population_grades[0:4], population_grades[-4:])
+    # print(population_grades[0:4], population_grades[-4:])
     return best_individual, best_grade, best_in_interation
 
 
 if __name__ == "__main__":
     population = init_population(cube_constrains, POPULATION_SIZE)
-    print(
-        evolution(
-            cost_function, population, MUTATION_STRENGTH, CROSS_PROBABILITY, ITERATIONS
-        )
+    point, grade, bests_in_pop = evolution(
+        cost_function, population, MUTATION_STRENGTH, CROSS_PROBABILITY, ITERATIONS
     )
+    print(bests_in_pop[:4])
+    print(bests_in_pop[-4:])

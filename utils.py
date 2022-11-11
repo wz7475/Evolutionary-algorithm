@@ -65,9 +65,22 @@ def roulette_reproduction(population: Sequence, population_grades: Sequence):
     max_grade = max(population_grades)
     min_grade = min(population_grades)
     # min max scaler
+    def pseudo_min_max_scaler_modified(grade):
+        nominator = grade - min_grade
+        denominator = max_grade - min_grade
+        scaled = 1 - nominator / denominator
+        if scaled <= 0.1:
+            scaled += 0.02
+        elif scaled >= 0.9:
+            scaled -= 0.02
+        return scaled
     distribution = [
-        1 - (grade - min_grade) / (max_grade - min_grade) for grade in population_grades
+        pseudo_min_max_scaler_modified(grade) for grade in population_grades
     ]
+    return choices(population=population, weights=distribution, k=len(population))
+
+def roulette_reproduction_weak(population: Sequence, population_grades: Sequence):
+    distribution = [1 - grade / sum(population_grades) for grade in population_grades]
     return choices(population=population, weights=distribution, k=len(population))
 
 
