@@ -64,7 +64,11 @@ def init_population(constrains: dict, quantity: int):
 def roulette_reproduction(population: Sequence, population_grades: Sequence):
     max_grade = max(population_grades)
     min_grade = min(population_grades)
-    # min max scaler
+    """
+    basic proportion: (1 - grade / sum_of_grades) does not distinguish enough week and strong individuals,
+    in order to stress difference min max scaler is applied,
+    it may occur that some individuals probability is equal to 0 or 1, edge vales are 'soften'  
+    """
     def pseudo_min_max_scaler_modified(grade):
         nominator = grade - min_grade
         denominator = max_grade - min_grade
@@ -74,10 +78,13 @@ def roulette_reproduction(population: Sequence, population_grades: Sequence):
         elif scaled >= 0.9:
             scaled -= 0.02
         return scaled
+
     distribution = [
         pseudo_min_max_scaler_modified(grade) for grade in population_grades
     ]
+    """take k random choices based on weights - probability distribution"""
     return choices(population=population, weights=distribution, k=len(population))
+
 
 def roulette_reproduction_weak(population: Sequence, population_grades: Sequence):
     distribution = [1 - grade / sum(population_grades) for grade in population_grades]
