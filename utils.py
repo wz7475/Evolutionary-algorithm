@@ -62,7 +62,12 @@ def init_population(constrains: dict, quantity: int):
 
 
 def roulette_reproduction(population: Sequence, population_grades: Sequence):
-    distribution = [1 - grade / sum(population_grades) for grade in population_grades]
+    max_grade = max(population_grades)
+    min_grade = min(population_grades)
+    # min max scaler
+    distribution = [
+        1 - (grade - min_grade) / (max_grade - min_grade) for grade in population_grades
+    ]
     return choices(population=population, weights=distribution, k=len(population))
 
 

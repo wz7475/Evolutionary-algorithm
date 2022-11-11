@@ -27,7 +27,8 @@ def evolution(
     best_individual, best_grade = find_best_individual(
         population_members, population_grades
     )
-    for _ in range(iterations):
+    best_in_interation = []
+    for i in range(iterations):
         # reproduction
         mutant_population = roulette_reproduction(population_members, population_grades)
 
@@ -41,15 +42,21 @@ def evolution(
             mutant_population, mutants_grades
         )
         if best_mutant_grade <= best_grade:
+            # if best_mutant_grade - best_mutant_grade <= 0.0000001:
+            #     print(i)
+            #     break
             best_grade = best_mutant_grade
             best_individual = best_mutant
-
+        best_in_interation.append(best_grade)
         # generational succession
         population_members = mutant_population
         population_grades = mutants_grades
-        print(best_grade)
+        # print(best_grade)
 
-    return best_individual, best_grade
+
+
+    print(population_grades[0:4], population_grades[-4:])
+    return best_individual, best_grade, best_in_interation
 
 
 if __name__ == "__main__":
