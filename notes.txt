@@ -1,5 +1,0 @@
-1. init population, mutation - rozkład norm - upper boundry exclusive
-    założenie parzystej liczebności mutacji
-2. resource - cost_function - global variable
-3. one point crossover
-    - 2 wspoółrzędne - 3 punkty do przecięcia
