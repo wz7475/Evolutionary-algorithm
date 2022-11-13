@@ -1,29 +1,29 @@
-from typing import Callable, Sequence
-from utils import (
-    cost_function,
-    find_best_individual,
-    roulette_reproduction,
-    one_point_crossover,
-    gauss_mutation,
-    init_population,
-    cube_constrains,
-    roulette_reproduction_weak,
-)
+from typing import Callable, List
+
 from hiper_params import (
     POPULATION_SIZE,
     CROSS_PROBABILITY,
     MUTATION_STRENGTH,
     ITERATIONS,
 )
+from utils import (
+    cost_function,
+    find_best_individual,
+    one_point_crossover,
+    gauss_mutation,
+    init_population,
+    cube_constrains,
+    roulette_reproduction
+)
 
 
 def evolution(
-    cost_function: Callable,
-    reproduction_function: Callable,
-    population_members: Sequence,
-    mutation_strength: float,
-    cross_probability: float,
-    iterations: int,
+        cost_function: Callable,
+        reproduction_function: Callable,
+        population_members: List,
+        mutation_strength: float,
+        cross_probability: float,
+        iterations: int,
 ):
     population_grades = [cost_function(individual) for individual in population_members]
     best_individual, best_grade = find_best_individual(
@@ -57,7 +57,7 @@ def evolution(
 if __name__ == "__main__":
     population = init_population(cube_constrains, POPULATION_SIZE)
     point, grade, bests_in_pop = evolution(
-        cost_function, population, MUTATION_STRENGTH, CROSS_PROBABILITY, ITERATIONS
+        cost_function, roulette_reproduction, population, MUTATION_STRENGTH, CROSS_PROBABILITY, ITERATIONS
     )
     print(bests_in_pop[:4])
     print(bests_in_pop[-4:])

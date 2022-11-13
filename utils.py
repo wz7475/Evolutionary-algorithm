@@ -1,19 +1,21 @@
 import copy
-import json
-from typing import Sequence, Tuple
+from typing import Tuple, List
 from math import e as e_constant
 from random import uniform, choices, randint
 import numpy as np
 
-with open("resources.json") as f:
-    resources = json.load(f)
 
-
-def _manhattandistance(x: Sequence[float], y: Sequence[float]) -> float:
+def _manhattandistance(x: Tuple, y: Tuple) -> float:
     return abs(x[0] - y[0]) + abs(x[1] - y[1])
 
 
-def cost_function(localisation: Sequence[float]) -> float:
+def cost_function(localisation: Tuple) -> float:
+    resources = {
+        "z1": [20, [1, 1]],
+        "z2": [10, [-0.5, 1]],
+        "z3": [5, [-1, -0.5]],
+        "z4": [10, [1, -1]]
+    }
     total_cost = 0
     for resource_name in resources:
         quantity, resource_localisation = resources[resource_name]
@@ -61,7 +63,7 @@ def init_population(constrains: dict, quantity: int):
     ]
 
 
-def roulette_reproduction(population: Sequence, population_grades: Sequence):
+def roulette_reproduction(population: List, population_grades: List):
     max_grade = max(population_grades)
     min_grade = min(population_grades)
     """
@@ -69,6 +71,7 @@ def roulette_reproduction(population: Sequence, population_grades: Sequence):
     in order to stress difference min max scaler is applied,
     it may occur that some individuals probability is equal to 0 or 1, edge vales are 'soften'  
     """
+
     def pseudo_min_max_scaler_modified(grade):
         nominator = grade - min_grade
         denominator = max_grade - min_grade
@@ -86,13 +89,13 @@ def roulette_reproduction(population: Sequence, population_grades: Sequence):
     return choices(population=population, weights=distribution, k=len(population))
 
 
-def roulette_reproduction_weak(population: Sequence, population_grades: Sequence):
+def roulette_reproduction_weak(population: List, population_grades: List):
     distribution = [1 - grade / sum(population_grades) for grade in population_grades]
     return choices(population=population, weights=distribution, k=len(population))
 
 
 def find_best_individual(
-    population: Sequence, population_grades: Sequence
+        population: List, population_grades: List
 ) -> Tuple[float, float]:
     min_index = 0
     min_grade = population_grades[min_index]
@@ -103,7 +106,7 @@ def find_best_individual(
     return population[min_index], min_grade
 
 
-def one_point_crossover(population: Sequence, crossover_probability: float) -> Sequence:
+def one_point_crossover(population: List, crossover_probability: float) -> List:
     new_population = []
     for_crossover = []
     for individual in population:
@@ -135,7 +138,12 @@ def gauss_mutation(population: np.array, mutation_strength: float) -> np.array:
     return mutant_population
 
 
-cube_constrains = _get_cube_constrains(resources)
+cube_constrains = _get_cube_constrains({
+    "z1": [20, [1, 1]],
+    "z2": [10, [-0.5, 1]],
+    "z3": [5, [-1, -0.5]],
+    "z4": [10, [1, -1]]
+})
 
 if __name__ == "__main__":
     print(cube_constrains)
