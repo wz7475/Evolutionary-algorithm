@@ -59,5 +59,5 @@ if __name__ == "__main__":
     point, grade, bests_in_pop = evolution(
         cost_function, roulette_reproduction, population, MUTATION_STRENGTH, CROSS_PROBABILITY, ITERATIONS
     )
-    print(bests_in_pop[:4])
-    print(bests_in_pop[-4:])
+    print(f"found best localisation: {point}")
+    print(f"estimated cost is: {grade}")
